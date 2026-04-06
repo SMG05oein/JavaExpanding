@@ -3,6 +3,7 @@ package com.javaExpanding.Two.Admin.Controller;
 import com.javaExpanding.Two.Admin.Dto.AdminLoginDto;
 import com.javaExpanding.Two.Admin.Dto.AdminSignUpDto;
 import com.javaExpanding.Two.Admin.Service.AdminService;
+import com.javaExpanding.Two.Error.MyError1;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ public class AdminController {
         try {
             adminService.adminSignup(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다.");
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

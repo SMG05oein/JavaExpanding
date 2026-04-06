@@ -1,5 +1,6 @@
 package com.javaExpanding.Two.User.Impl;
 
+import com.javaExpanding.Two.Admin.Repository.AdminRepository;
 import com.javaExpanding.Two.User.Database.RefreshToken;
 import com.javaExpanding.Two.User.Database.Users;
 import com.javaExpanding.Two.User.Dto.UserLoginDto;
@@ -22,6 +23,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class UserImpl implements UserService {
+    private final AdminRepository adminRepository;
     private final UserRepository userRepository;
     private final EmailAuthRepository emailRepo;
     private final PasswordEncoder passwordEncoder;
@@ -34,6 +36,9 @@ public class UserImpl implements UserService {
     public void signup(UserSignUpDto dto) {
         if(userRepository.findByUserEmail(dto.getUserEmail()).isPresent()){
             throw new RuntimeException("이미 회원가입이 되어있는 이메일입니다.");
+        }
+        if(adminRepository.existsByAdminEmail(dto.getUserEmail())) {
+            throw new RuntimeException("이미 관리자로 회원가입이 되어있는 이메일입니다.");
         }
         Users user = new Users();
         user.setUserEmail(dto.getUserEmail());

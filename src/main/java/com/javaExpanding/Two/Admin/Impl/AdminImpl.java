@@ -5,9 +5,11 @@ import com.javaExpanding.Two.Admin.Dto.AdminLoginDto;
 import com.javaExpanding.Two.Admin.Dto.AdminSignUpDto;
 import com.javaExpanding.Two.Admin.Repository.AdminRepository;
 import com.javaExpanding.Two.Admin.Service.AdminService;
+import com.javaExpanding.Two.Error.MyError1;
 import com.javaExpanding.Two.User.Database.RefreshToken;
 import com.javaExpanding.Two.User.JwtUtil;
 import com.javaExpanding.Two.User.Repository.RefreshTokenRepository;
+import com.javaExpanding.Two.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class AdminImpl implements AdminService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
 
     /*관리자 회원가입*/
     @Override
@@ -31,6 +34,12 @@ public class AdminImpl implements AdminService {
     public void adminSignup(AdminSignUpDto dto) {
         if(adminRepository.existsByAdminId(dto.getAdminId())) {
             throw new RuntimeException("이미 존재하는 관리자 아이디입니다.");
+        }
+        if(adminRepository.existsByAdminEmail(dto.getAdminEmail())) {
+            throw new RuntimeException("이미 존재하는 관리자 이메일입니다.");
+        }
+        if(userRepository.findByUserEmail(dto.getAdminEmail()).isPresent()){
+            throw new RuntimeException("이미 유저로 회원가입이 되어있는 이메일입니다.");
         }
 
         Admin admin = Admin.builder()

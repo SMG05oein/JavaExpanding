@@ -26,7 +26,9 @@ public class UsersController {
         try {
             userService.signup(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다.");
-        } catch (Exception e) {
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
