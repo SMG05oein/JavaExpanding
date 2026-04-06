@@ -24,7 +24,7 @@ public class JwtUtil {
 
     // JWT 만들어주는 함수
     public String createAccessToken(String email, String role, String position) {
-        long accessTokenValidTime = 20 * 60 * 1000L;
+        long accessTokenValidTime = 20 * 60 * 1000L; // 20분
         return Jwts.builder()
                 .setSubject(email)
                 .claim("position", position)
@@ -46,7 +46,7 @@ public class JwtUtil {
 
     // JWT 리프레시 토큰
     public String createRefreshToken(String email) {
-        long refreshTokenValidTime = 40 * 60 * 1000L;
+        long refreshTokenValidTime = 40 * 60 * 1000L; // 40분
 
         return Jwts.builder()
                 .setSubject(email)

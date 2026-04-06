@@ -98,6 +98,7 @@ public class PAImpl implements PAService {
         // 1. 리프레시 토큰에서 식별자(Email) 추출
         Claims claims = jwtUtil.extractToken(refreshToken);
         String identifier = claims.getSubject();
+        System.out.println("dasadsadsada"+identifier);
 
         // 2. DB에서 해당 식별자의 리프레시 토큰 실존 여부 확인
         RefreshToken savedToken = refreshTokenRepository.findByUserEmail(identifier)

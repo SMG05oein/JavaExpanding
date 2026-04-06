@@ -29,11 +29,11 @@ public class PAController {
         }
     }
 
-    @Operation(summary = "토큰 갱신", description = "리프레시 토큰을 보내면 새 액세스 토큰, 리프레시 토큰을 줍니다.")
+    @Operation(summary = "토큰 갱신", description = "리프레시 토큰을 JSON 바디로 보내면 새 토큰들을 반환합니다.")
     @PostMapping("/refresh")
-    public ResponseEntity<?> refresh(@RequestParam String refreshToken) {
+    public ResponseEntity<?> refresh(@RequestHeader("refreshToken") String reToken) {
         try {
-            Map<String, String> tokens = paService.refreshAccessToken(refreshToken);
+            Map<String, String> tokens = paService.refreshAccessToken(reToken);
             return ResponseEntity.ok(tokens);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션이 만료되었습니다. 다시 로그인해주세요.");
@@ -56,12 +56,11 @@ public class PAController {
     @PostMapping("/check_status")
     public ResponseEntity<?> checkStatus() {
         try {
-            Map<String, Object> response = new HashMap<>();
+            Map<String, Object> response;
             response = paService.checkStatus();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않거나 만료된 세션입니다.");
-
         }
     }
 
