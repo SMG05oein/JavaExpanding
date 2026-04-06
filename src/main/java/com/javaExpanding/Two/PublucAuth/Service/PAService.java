@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Service
 public interface PAService {
     // 이메일 인증번호 보내기
     void sendVerificationEmail(String email);

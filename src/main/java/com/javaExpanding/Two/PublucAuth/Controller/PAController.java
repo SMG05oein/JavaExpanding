@@ -1,15 +1,11 @@
 package com.javaExpanding.Two.PublucAuth.Controller;
 
 import com.javaExpanding.Two.PublucAuth.Service.PAService;
-import com.javaExpanding.Two.User.Service.CustomUserDetails;
-import com.javaExpanding.Two.User.Service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -32,13 +28,12 @@ public class PAController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     @Operation(summary = "토큰 갱신", description = "리프레시 토큰을 보내면 새 액세스 토큰, 리프레시 토큰을 줍니다.")
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@RequestParam String refreshToken) {
         try {
-            // 이제 Map<String, String> 형태로 두 토큰 정보를 모두 받습니다.
             Map<String, String> tokens = paService.refreshAccessToken(refreshToken);
-//            System.out.println(tokens);
             return ResponseEntity.ok(tokens);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션이 만료되었습니다. 다시 로그인해주세요.");
