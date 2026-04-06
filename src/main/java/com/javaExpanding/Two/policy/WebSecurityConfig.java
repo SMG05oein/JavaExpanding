@@ -106,7 +106,7 @@ public class WebSecurityConfig {
         // 🚨 Vercel 배포 시 실제 프런트엔드 도메인을 여기에 추가해야 합니다.
         configuration.setAllowedOrigins(Arrays.asList(
                 "https://hoseothon11.vercel.app",
-                "https://localhost:3000"
+                "http://localhost:3000/"
         ));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
