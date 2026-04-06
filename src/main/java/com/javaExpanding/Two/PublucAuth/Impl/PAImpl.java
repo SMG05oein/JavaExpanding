@@ -10,10 +10,14 @@ import com.javaExpanding.Two.User.JwtUtil;
 import com.javaExpanding.Two.User.Repository.EmailAuthRepository;
 import com.javaExpanding.Two.User.Repository.RefreshTokenRepository;
 import com.javaExpanding.Two.User.Repository.UserRepository;
+import com.javaExpanding.Two.User.Service.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,23 +140,19 @@ public class PAImpl implements PAService {
         tokens.put("refreshToken", newRefreshToken);
         return tokens;
     }
-    @Override
-    public Map<String, Object> checkStatus(String token) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            // 1. 토큰 검증 및 파싱
-            Claims claims = jwtUtil.extractToken(token);
 
-            // 2. 토큰 내부 정보 추출
-            String identifier = claims.getSubject(); // 이메일 혹은 아이디
-            String role = jwtUtil.getRole(token); // USER 또는 ADMIN
-            String position = jwtUtil.getPosition(token); // USER 또는 ADMIN
+    @Override
+    public Map<String, Object> checkStatus() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
             response.put("isLoggedIn", true);
-            response.put("id", identifier);
-            response.put("grade", position);
-            response.put("role", role);
-            // 필요하다면 등급(grade) 정보도 여기서 추출 가능
+            response.put("id", userDetails.getIdentifier());
+            response.put("role", userDetails.getRole());
+            response.put("position", userDetails.getPosition());
 
         } catch (Exception e) {
             response.put("isLoggedIn", false);

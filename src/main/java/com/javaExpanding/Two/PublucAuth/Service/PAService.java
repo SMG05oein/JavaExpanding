@@ -15,5 +15,5 @@ public interface PAService {
     // 아이디 중복 체크
     boolean existsByEmail(String email);
     // 로그인 했니?
-    Map<String, Object> checkStatus(String token);
+    Map<String, Object> checkStatus();
 }

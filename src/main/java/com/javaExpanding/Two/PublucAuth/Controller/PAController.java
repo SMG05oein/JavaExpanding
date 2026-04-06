@@ -1,14 +1,18 @@
 package com.javaExpanding.Two.PublucAuth.Controller;
 
 import com.javaExpanding.Two.PublucAuth.Service.PAService;
+import com.javaExpanding.Two.User.Service.CustomUserDetails;
 import com.javaExpanding.Two.User.Service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Tag(name="공통 인증", description = "이메일 전송, JWT 관련 API 명세서입니다.")
@@ -53,10 +57,17 @@ public class PAController {
         }
     }
 
-    @Operation(summary = "로그인 상태 체크", description = "토큰을 보내면 현재 로그인 여부와 유저 정보를 반환합니다.")
+    @Operation(summary = "로그인 상태 체크", description = "토큰을 기반으로 사용자 정보를 반환합니다.")
     @PostMapping("/check_status")
-    public ResponseEntity<?> checkStatus(@RequestHeader("Authorization") String token) {
-        String jwt = token.startsWith("Bearer ") ? token.substring(7) : token;
-        return ResponseEntity.ok(paService.checkStatus(jwt));
+    public ResponseEntity<?> checkStatus() {
+        try {
+            Map<String, Object> response = new HashMap<>();
+            response = paService.checkStatus();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않거나 만료된 세션입니다.");
+
+        }
     }
+
 }

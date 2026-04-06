@@ -67,8 +67,7 @@ public class WebSecurityConfig {
 
                                 // 4. 인증/회원가입 API 접근 허용
                                 .requestMatchers(
-                                        "/api/public_auh/send_email",
-                                        "/api/public_auh/send_email",
+                                        "/api/public_auh/**",
                                         "/api/auth/signup",
                                         "/api/admin/signup",
                                         "/api/auth/login",
@@ -106,8 +105,8 @@ public class WebSecurityConfig {
 
         // 🚨 Vercel 배포 시 실제 프런트엔드 도메인을 여기에 추가해야 합니다.
         configuration.setAllowedOrigins(Arrays.asList(
-                "https://hoseothon11.vercel.app/",
-                "https://localhost:/"
+                "https://hoseothon11.vercel.app",
+                "https://localhost:3000"
         ));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));

@@ -3,6 +3,7 @@ package com.javaExpanding.Two.User.Service;
 import com.javaExpanding.Two.Admin.Database.Admin;
 import com.javaExpanding.Two.User.Database.Users;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +31,7 @@ public class CustomUserDetails implements UserDetails {
 
     // 2. 관리자용 생성자
     public CustomUserDetails(Admin admin) {
-        this.identifier = admin.getAdminId(); // 혹은 adminEmail
+        this.identifier = admin.getAdminId();
         this.password = admin.getAdminPw();
         this.role = admin.getAdminGrade().name();
         this.position = "Admin";
