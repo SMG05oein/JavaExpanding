@@ -3,7 +3,6 @@ package com.javaExpanding.Two.Admin.Controller;
 import com.javaExpanding.Two.Admin.Dto.AdminLoginDto;
 import com.javaExpanding.Two.Admin.Dto.AdminSignUpDto;
 import com.javaExpanding.Two.Admin.Service.AdminService;
-import com.javaExpanding.Two.Error.MyError1;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

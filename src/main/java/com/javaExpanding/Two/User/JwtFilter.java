@@ -10,11 +10,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -38,25 +42,36 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (token != null) {
             try {
+                // 1. 토큰에서 전체 클레임 추출
                 Claims claims = jwtUtil.extractToken(token);
                 String email = claims.getSubject();
 
-                // Spring Security가 제공하는 표준 UserDetails를 로드
+                // 2. 토큰 내의 'role' 값을 직접 가져옴 (민관님의 토큰 구조: "role": "ADMIN5")
+                String role = claims.get("role", String.class);
+
+                // 3. 권한 객체 생성 (SimpleGrantedAuthority)
+                // 만약 토큰에 ADMIN5라고 되어 있으면 ADMIN5라는 권한을 생성합니다.
+                List<GrantedAuthority> authorities = Collections.emptyList();
+                if (role != null) {
+                    authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
+                }
+
+                // 4. UserDetails 로드 (인증된 사용자 객체 생성용)
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
 
-                // 인증 객체 생성 및 Context에 저장
+                // 5. 토큰에서 추출한 실시간 권한(authorities)을 사용하여 인증 객체 생성
+                // 기존의 userDetails.getAuthorities() 대신 토큰에서 꺼낸 authorities를 넣는 것이 핵심입니다!
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
+                        userDetails, null, authorities
                 );
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (ExpiredJwtException e) {
                 System.err.println("Token Expired: " + e.getMessage());
-                // 만료된 토큰 처리 (Filter 체인 중단)
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             } catch (Exception e) {
-                // 토큰 변조 또는 사용자 정보 로드 실패
                 System.err.println("JWT Validation Failed: " + e.getMessage());
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return;

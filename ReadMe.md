@@ -21,14 +21,15 @@
 
 ## 🛠 기술 스택 (Tech Stack)
 
-| 구분 | 상세 내용 |
-| :--- | :--- |
-| **Framework** | Spring Boot 4.0.3 |
-| **Java Version** | Java 21 |
-| **Database** | MySQL 8.0.40 (via SSH Tunneling) |
-| **ORM** | Spring Data JPA (Hibernate) |
-| **Security** | Spring Security 7.0, JWT (JJWT) |
-| **API Docs** | Swagger / OpenAPI 3.0 |
+| 구분               | 상세 내용                            |
+|:-----------------|:---------------------------------|
+| **Framework**    | Spring Boot 3.4.1                |
+| **Swagger**      | V3 2.7.0                         |
+| **Java Version** | Java 21                          |
+| **Database**     | MySQL 8.0.40 (via SSH Tunneling) |
+| **ORM**          | Spring Data JPA (Hibernate)      |
+| **Security**     | Spring Security 7.0, JWT (JJWT)  |
+| **API Docs**     | Swagger / OpenAPI 3.0            |
 
 ---
 
@@ -38,6 +39,8 @@
 src/main/java/com.javaExpanding.Two
 ├── Admin             # 관리자 도메인 (회원가입, 로그인, 로그아웃)
 ├── User              # 사용자 도메인 (회원가입, 로그인, 로그아웃)
+├── Facility          # 시설물 관련 도메인
+├── Facility_Time     # 시설물 운영 도메인
 ├── PublucAuth        # 공통 인증 (이메일 발송, 인증 확인, 토큰 갱신, 상태 체크)
 ├── Policy            # Security Config 및 JWT Filter 설정
 ├── Error             # 커스텀 예외 처리

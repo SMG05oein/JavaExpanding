@@ -5,7 +5,6 @@ import com.javaExpanding.Two.Admin.Dto.AdminLoginDto;
 import com.javaExpanding.Two.Admin.Dto.AdminSignUpDto;
 import com.javaExpanding.Two.Admin.Repository.AdminRepository;
 import com.javaExpanding.Two.Admin.Service.AdminService;
-import com.javaExpanding.Two.Error.MyError1;
 import com.javaExpanding.Two.User.Database.RefreshToken;
 import com.javaExpanding.Two.User.JwtUtil;
 import com.javaExpanding.Two.User.Repository.RefreshTokenRepository;

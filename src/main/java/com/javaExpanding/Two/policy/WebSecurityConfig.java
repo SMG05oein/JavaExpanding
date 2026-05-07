@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
@@ -62,7 +64,10 @@ public class WebSecurityConfig {
                                         "/swagger-ui.html",
                                         "/swagger-ui/",
                                         "/v3/api-docs/**",
-                                        "/swagger-resources/**"
+                                        "/v3/api-docs/",
+                                        "/v3/api-docs",
+                                        "/swagger-resources/**",
+                                        "/webjars/**"
                                 ).permitAll()
 
                                 // 4. 인증/회원가입 API 접근 허용
@@ -76,17 +81,15 @@ public class WebSecurityConfig {
                                         "/api/admin/logout"
                                 ).permitAll()
 
-                                // 5. 단어 API 접근 허용
                                 .requestMatchers(
-                                        "/api/word/**"
-//                                "api/que/**"
+                                        "/api/facility/list"
                                 ).permitAll()
 
                                 .requestMatchers(
                                         "/api/test/test1",
                                         "/api/test/test2"
                                 ).permitAll()
-
+                                .requestMatchers("/error").permitAll()
                                 // 5. 나머지 모든 요청은 인증 필요
                                 .anyRequest().authenticated()
                 );
