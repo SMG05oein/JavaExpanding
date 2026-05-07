@@ -22,6 +22,9 @@ public class Users {
     @Column(name = "user_email", nullable = false, unique = true, length = 255)
     private String userEmail; // 로그인 이메일
 
+    @Column(name = "user_id", nullable = false, unique = true, length = 100)
+    private String userId;
+
     @Column(name = "user_pw", nullable = false, length = 255)
     private String userPw; // 비밀번호
 

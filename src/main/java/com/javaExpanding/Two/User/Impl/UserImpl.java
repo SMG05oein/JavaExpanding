@@ -44,6 +44,7 @@ public class UserImpl implements UserService {
         user.setUserEmail(dto.getUserEmail());
         user.setUserPw(passwordEncoder.encode(dto.getUserPw()));
         user.setUserName(dto.getUserName());
+        user.setUserId(dto.getUserId());
         user.setUserStatus(Users.UserStatus.NORMAL);
 
         userRepository.save(user);
@@ -55,22 +56,24 @@ public class UserImpl implements UserService {
     @Override
     @Transactional
     public Map<String, String> login(UserLoginDto dto) {
-        String email = dto.getUserEmail();
+        // 입력받은 값 (이메일일 수도, 아이디일 수도 있음)
+        String loginIdOrEmail = dto.getUserEmailorId();
         String pw = dto.getUserPw();
-        Users user = userRepository.findByUserEmail(email)
+
+        Users user = userRepository.findByUserEmailOrUserId(loginIdOrEmail, loginIdOrEmail)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 계정입니다."));
 
         if (!passwordEncoder.matches(pw, user.getUserPw())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
-        String accessToken = jwtUtil.createAccessToken(email, user.getUserStatus().name(), "User");
-        String refreshToken = jwtUtil.createRefreshToken(email);
+        String accessToken = jwtUtil.createAccessToken(user.getUserEmail(), user.getUserStatus().name(), "User");
+        String refreshToken = jwtUtil.createRefreshToken(user.getUserEmail());
 
-        RefreshToken tokenEntity = refreshTokenRepository.findByUserEmail(email)
+        RefreshToken tokenEntity = refreshTokenRepository.findByUserEmail(user.getUserEmail())
                 .orElse(new RefreshToken());
 
-        tokenEntity.setUserEmail(email);
+        tokenEntity.setUserEmail(user.getUserEmail());
         tokenEntity.setToken(refreshToken);
         tokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(30));
 
