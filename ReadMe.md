@@ -24,12 +24,11 @@
 | 구분               | 상세 내용                            |
 |:-----------------|:---------------------------------|
 | **Framework**    | Spring Boot 3.4.1                |
-| **Swagger**      | V3 2.7.0                         |
 | **Java Version** | Java 21                          |
 | **Database**     | MySQL 8.0.40 (via SSH Tunneling) |
 | **ORM**          | Spring Data JPA (Hibernate)      |
 | **Security**     | Spring Security 7.0, JWT (JJWT)  |
-| **API Docs**     | Swagger / OpenAPI 3.0            |
+| **API Docs**     | Swagger / OpenAPI 3.0 2.7.0      |
 
 ---
 
