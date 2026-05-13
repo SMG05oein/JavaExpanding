@@ -1,6 +1,7 @@
 package com.javaExpanding.Two.Facility.Impl;
 
 import com.javaExpanding.Two.Facility.Database.Facility;
+import com.javaExpanding.Two.Facility.Dto.FacilityNameProjection;
 import com.javaExpanding.Two.Facility.Dto.FacilityRequestDto;
 import com.javaExpanding.Two.Facility.Repository.FacilityRepository;
 import com.javaExpanding.Two.Facility.Service.FacilityService;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +48,12 @@ public class FacilityImpl implements FacilityService {
         // 한 페이지에 10개씩, 최신순(facIdx 내림차순) 정렬
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("facIdx").descending());
         return facilityRepository.findAll(pageRequest);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<FacilityNameProjection> getAllFacilities() {
+        return facilityRepository.findAllBy();
     }
 
     @Override

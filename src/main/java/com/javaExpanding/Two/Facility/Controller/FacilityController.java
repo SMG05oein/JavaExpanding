@@ -1,6 +1,7 @@
 package com.javaExpanding.Two.Facility.Controller;
 
 import com.javaExpanding.Two.Facility.Database.Facility;
+import com.javaExpanding.Two.Facility.Dto.FacilityNameProjection;
 import com.javaExpanding.Two.Facility.Dto.FacilityRequestDto;
 import com.javaExpanding.Two.Facility.Service.FacilityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "시설물 관리", description = "시설물 CRUD 및 페이지네이션 API")
 @RestController
@@ -46,6 +49,17 @@ public class FacilityController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 중 오류 발생");
+        }
+    }
+
+    @Operation(summary = "시설물 전체 목록 조회", description = "전체 시설물 정보를 조회합니다.")
+    @GetMapping("/allList")
+    public ResponseEntity<?> getAllList() {
+        try {
+            List<FacilityNameProjection> facilities = facilityService.getAllFacilities();
+            return ResponseEntity.ok(facilities);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회 중 예상치 못한 오류 발생");
         }
     }
 
