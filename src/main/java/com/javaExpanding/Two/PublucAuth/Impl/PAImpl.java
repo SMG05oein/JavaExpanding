@@ -161,4 +161,46 @@ public class PAImpl implements PAService {
         }
         return response;
     }
+
+    @Override
+    public Map<String, Object> getMyInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() instanceof String) {
+            throw new RuntimeException("인증되지 않은 사용자입니다.");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String identifier = userDetails.getIdentifier();
+        String position = userDetails.getPosition();
+        Map<String, Object> response = new HashMap<>();
+
+        if ("User".equals(position)) {
+            Users user = userRepository.findByUserEmail(identifier)
+                    .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+            response.put("position", "User");
+            response.put("userIdx", user.getUserIdx());
+            response.put("userId", user.getUserId());
+            response.put("userEmail", user.getUserEmail());
+            response.put("userName", user.getUserName());
+            response.put("userStatus", user.getUserStatus());
+            response.put("userCreateDt", user.getUserCreateDt());
+            response.put("userUpdateDt", user.getUserUpdateDt());
+        } else if ("Admin".equals(position)) {
+            Admin admin = adminRepository.findByAdminIdOrAdminEmail(identifier, identifier)
+                    .orElseThrow(() -> new RuntimeException("관리자 정보를 찾을 수 없습니다."));
+            response.put("position", "Admin");
+            response.put("adminIdx", admin.getAdminIdx());
+            response.put("adminId", admin.getAdminId());
+            response.put("adminEmail", admin.getAdminEmail());
+            response.put("adminName", admin.getAdminName());
+            response.put("adminStatus", admin.getAdminStatus());
+            response.put("adminGrade", admin.getAdminGrade());
+            response.put("adminCreateDt", admin.getAdminCreateDt());
+            response.put("adminUpdateDt", admin.getAdminUpdateDt());
+        } else {
+            throw new RuntimeException("알 수 없는 권한 유형입니다.");
+        }
+
+        return response;
+    }
 }

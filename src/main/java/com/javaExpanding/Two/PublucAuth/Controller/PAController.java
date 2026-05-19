@@ -64,4 +64,15 @@ public class PAController {
         }
     }
 
+    @Operation(summary = "내 정보 조회", description = "현재 로그인한 사용자(일반 유저 또는 관리자)의 상세 정보를 조회합니다.")
+    @GetMapping("/my_info")
+    public ResponseEntity<?> getMyInfo() {
+        try {
+            Map<String, Object> myInfo = paService.getMyInfo();
+            return ResponseEntity.ok(myInfo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
+
 }

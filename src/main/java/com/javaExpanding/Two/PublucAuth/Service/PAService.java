@@ -15,4 +15,6 @@ public interface PAService {
     boolean existsByEmail(String email);
     // 로그인 했니?
     Map<String, Object> checkStatus();
+    // 내 정보 조회
+    Map<String, Object> getMyInfo();
 }
