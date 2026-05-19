@@ -3,6 +3,9 @@ package com.javaExpanding.Two.PublucAuth.Controller;
 import com.javaExpanding.Two.PublucAuth.Dto.MyInfoResponseDto;
 import com.javaExpanding.Two.PublucAuth.Service.PAService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -66,6 +69,7 @@ public class PAController {
     }
 
     @Operation(summary = "내 정보 조회", description = "현재 로그인한 사용자(일반 유저 또는 관리자)의 상세 정보를 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = MyInfoResponseDto.class)))
     @GetMapping("/my_info")
     public ResponseEntity<?> getMyInfo() {
         try {
