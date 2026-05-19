@@ -1,5 +1,6 @@
 package com.javaExpanding.Two.PublucAuth.Service;
 
+import com.javaExpanding.Two.PublucAuth.Dto.MyInfoResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -16,5 +17,5 @@ public interface PAService {
     // 로그인 했니?
     Map<String, Object> checkStatus();
     // 내 정보 조회
-    Map<String, Object> getMyInfo();
+    MyInfoResponseDto getMyInfo();
 }

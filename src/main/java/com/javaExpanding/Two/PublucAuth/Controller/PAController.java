@@ -1,5 +1,6 @@
 package com.javaExpanding.Two.PublucAuth.Controller;
 
+import com.javaExpanding.Two.PublucAuth.Dto.MyInfoResponseDto;
 import com.javaExpanding.Two.PublucAuth.Service.PAService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -68,7 +69,7 @@ public class PAController {
     @GetMapping("/my_info")
     public ResponseEntity<?> getMyInfo() {
         try {
-            Map<String, Object> myInfo = paService.getMyInfo();
+            MyInfoResponseDto myInfo = paService.getMyInfo();
             return ResponseEntity.ok(myInfo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
