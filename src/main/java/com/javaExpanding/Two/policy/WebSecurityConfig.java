@@ -82,7 +82,9 @@ public class WebSecurityConfig {
                                 ).permitAll()
 
                                 .requestMatchers(
-                                        "/api/facility/list"
+                                        "/api/facility/list",
+                                        "/api/facility/allList",
+                                        "/api/facility-time/list/*"
                                 ).permitAll()
 
                                 .requestMatchers(
