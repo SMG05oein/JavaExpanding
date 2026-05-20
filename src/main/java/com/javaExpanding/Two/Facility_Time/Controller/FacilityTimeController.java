@@ -23,7 +23,7 @@ public class FacilityTimeController {
 
     @Operation(summary = "운영 시간 등록", description = "어드민 권한이 있는 사용자만 운영 시간을 등록할 수 있습니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @PostMapping("/create")
+    @PostMapping("/admin/create")
     public ResponseEntity<String> create(@Valid @RequestBody FacilityTimeRequestDto dto) {
         try {
             facilityTimeService.createFacilityTime(dto);
@@ -35,7 +35,7 @@ public class FacilityTimeController {
 
     @Operation(summary = "운영 시간 수정", description = "어드민 권한이 있는 사용자만 운영 시간을 수정할 수 있습니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @PostMapping("/update/{id}")
+    @PostMapping("/admin/update/{id}")
     public ResponseEntity<String> update(@PathVariable Integer id, @Valid @RequestBody FacilityTimeRequestDto dto) {
         try {
             facilityTimeService.updateFacilityTime(id, dto);
@@ -48,7 +48,7 @@ public class FacilityTimeController {
     }
 
     @Operation(summary = "시설물별 운영 시간 조회", description = "특정 시설물의 모든 운영 시간 정보를 조회합니다.")
-    @GetMapping("/list/{facIdx}")
+    @GetMapping("/admin/list/{facIdx}")
     public ResponseEntity<?> getList(@PathVariable Integer facIdx) {
         try {
             List<FacilityTime> times = facilityTimeService.getFacilityTimesByFacIdx(facIdx);
@@ -60,7 +60,7 @@ public class FacilityTimeController {
 
     @Operation(summary = "운영 시간 삭제", description = "어드민 권한이 있는 사용자만 운영 시간을 삭제할 수 있습니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) {
         try {
             facilityTimeService.deleteFacilityTime(id);

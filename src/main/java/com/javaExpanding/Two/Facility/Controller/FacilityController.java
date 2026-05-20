@@ -27,7 +27,7 @@ public class FacilityController {
     @Operation(summary = "시설물 등록", description = "어드민 권한이 있는 사용자만 시설물을 등록할 수 있습니다.")
 //    @PreAuthorize("hasAuthority('ADMIN5') or hasAuthority('ADMIN')")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @PostMapping("/create")
+    @PostMapping("/admin/create")
     public ResponseEntity<String> create(@Valid @RequestBody FacilityRequestDto dto) {
         try {
 //            System.out.println("접속자 권한: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
@@ -40,7 +40,7 @@ public class FacilityController {
 
     @Operation(summary = "시설물 수정", description = "어드민 권한이 있는 사용자만 시설물을 수정할 수 있습니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @PostMapping("/update/{id}")
+    @PostMapping("/admin/update/{id}")
     public ResponseEntity<String> update(@PathVariable Integer id, @Valid @RequestBody FacilityRequestDto dto) {
         try {
             facilityService.updateFacility(id, dto);
@@ -76,7 +76,7 @@ public class FacilityController {
 
     @Operation(summary = "시설물 삭제", description = "어드민 권한이 있는 사용자만 시설물을 삭제할 수 있습니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) {
         try {
             facilityService.deleteFacility(id);

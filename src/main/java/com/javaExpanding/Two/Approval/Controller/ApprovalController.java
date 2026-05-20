@@ -23,7 +23,7 @@ public class ApprovalController {
 
     @Operation(summary = "예약 승인/반려", description = "관리자가 예약을 승인하거나 반려합니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @PostMapping("/process")
+    @PostMapping("/admin/process")
     public ResponseEntity<String> process(@Valid @RequestBody ApprovalRequestDto dto) {
         try {
             approvalService.processApproval(dto);
@@ -38,7 +38,7 @@ public class ApprovalController {
 
     @Operation(summary = "승인 목록 조회", description = "관리자가 전체 승인/반려 내역을 조회합니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @GetMapping("/list")
+    @GetMapping("/admin/list")
     public ResponseEntity<?> getList(@RequestParam(defaultValue = "0") int page) {
         try {
             Page<Approval> approvals = approvalService.getAllApprovals(page);
