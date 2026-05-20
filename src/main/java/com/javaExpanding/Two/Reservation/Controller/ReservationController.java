@@ -22,7 +22,6 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @Operation(summary = "예약 생성", description = "로그인한 유저가 예약을 신청합니다.")
-    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/create")
     public ResponseEntity<String> create(@Valid @RequestBody ReservationRequestDto dto) {
         try {
@@ -36,7 +35,6 @@ public class ReservationController {
     }
 
     @Operation(summary = "예약 수정", description = "본인의 예약을 수정합니다.")
-    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/update/{resIdx}")
     public ResponseEntity<String> update(@PathVariable Integer resIdx, @Valid @RequestBody ReservationRequestDto dto) {
         try {
@@ -50,7 +48,6 @@ public class ReservationController {
     }
 
     @Operation(summary = "예약 취소", description = "본인의 예약을 취소합니다.")
-    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/cancel/{resIdx}")
     public ResponseEntity<String> cancel(@PathVariable Integer resIdx) {
         try {
@@ -64,7 +61,6 @@ public class ReservationController {
     }
 
     @Operation(summary = "내 예약 목록", description = "로그인한 유저의 예약 목록을 조회합니다.")
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/my")
     public ResponseEntity<?> getMyReservations(@RequestParam(defaultValue = "0") int page) {
         try {
@@ -77,7 +73,7 @@ public class ReservationController {
 
     @Operation(summary = "전체 예약 목록", description = "관리자가 전체 예약 목록을 조회합니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @GetMapping("/list")
+    @GetMapping("/admin/list")
     public ResponseEntity<?> getAllReservations(@RequestParam(defaultValue = "0") int page) {
         try {
             Page<Reservation> reservations = reservationService.getAllReservations(page);
@@ -87,9 +83,9 @@ public class ReservationController {
         }
     }
 
-    @Operation(summary = "예약 삭제", description = "관리자가 예약을 삭제합니다.")
+    @Operation(summary = "관리자 예약 삭제", description = "관리자가 예약을 삭제합니다.")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN1','ADMIN2','ADMIN3','ADMIN4','ADMIN5')")
-    @DeleteMapping("/delete/{resIdx}")
+    @DeleteMapping("/admin/delete/{resIdx}")
     public ResponseEntity<String> delete(@PathVariable Integer resIdx) {
         try {
             reservationService.deleteReservation(resIdx);

@@ -1,5 +1,6 @@
 package com.javaExpanding.Two.Reservation.Database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.javaExpanding.Two.Facility.Database.Facility;
 import com.javaExpanding.Two.User.Database.Users;
 import jakarta.persistence.*;
@@ -26,10 +27,12 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_user_idx", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_fac_idx", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Facility facility;
 
     @Column(name = "res_date", nullable = false)
