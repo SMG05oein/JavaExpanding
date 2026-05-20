@@ -2,6 +2,7 @@ package com.javaExpanding.Two.Facility_Time.Controller;
 
 import com.javaExpanding.Two.Facility_Time.Database.FacilityTime;
 import com.javaExpanding.Two.Facility_Time.Dto.FacilityTimeRequestDto;
+import com.javaExpanding.Two.Facility_Time.Dto.FacilityTimeResponseDto;
 import com.javaExpanding.Two.Facility_Time.Service.FacilityTimeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -51,8 +52,9 @@ public class FacilityTimeController {
     @GetMapping("/admin/list/{facIdx}")
     public ResponseEntity<?> getList(@PathVariable Integer facIdx) {
         try {
-            List<FacilityTime> times = facilityTimeService.getFacilityTimesByFacIdx(facIdx);
-            return ResponseEntity.ok(times);
+            // DTO 리스트를 받아서 반환
+            List<FacilityTimeResponseDto> dtoList = facilityTimeService.getFacilityTimesByFacIdx(facIdx);
+            return ResponseEntity.ok(dtoList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회 중 예상치 못한 오류 발생");
         }

@@ -6,6 +6,8 @@ import com.javaExpanding.Two.Reservation.Database.Reservation;
 import com.javaExpanding.Two.Reservation.Dto.ReservationRequestDto;
 import com.javaExpanding.Two.Reservation.Repository.ReservationRepository;
 import com.javaExpanding.Two.Reservation.Service.ReservationService;
+import com.javaExpanding.Two.Approval.Database.Approval;
+import com.javaExpanding.Two.Approval.Repository.ApprovalRepository;
 import com.javaExpanding.Two.User.Database.Users;
 import com.javaExpanding.Two.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class ReservationImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final FacilityRepository facilityRepository;
     private final UserRepository userRepository;
+    private final ApprovalRepository approvalRepository;
 
     /* 예약 생성 */
     @Override
@@ -103,6 +106,15 @@ public class ReservationImpl implements ReservationService {
                 .orElseThrow(() -> new RuntimeException("유저 정보를 찾을 수 없습니다."));
 
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("resIdx").descending());
-        return reservationRepository.findByUser(user, pageRequest);
+        Page<Reservation> reservations = reservationRepository.findByUser(user, pageRequest);
+        
+        reservations.forEach(res -> {
+            if (res.getResStatus() == Reservation.ResStatus.거절) {
+                approvalRepository.findFirstByReservationOrderByAppIdxDesc(res)
+                        .ifPresent(approval -> res.setRejectReason(approval.getAppComment()));
+            }
+        });
+        
+        return reservations;
     }
 }

@@ -4,6 +4,7 @@ import com.javaExpanding.Two.Facility.Database.Facility;
 import com.javaExpanding.Two.Facility.Repository.FacilityRepository;
 import com.javaExpanding.Two.Facility_Time.Database.FacilityTime;
 import com.javaExpanding.Two.Facility_Time.Dto.FacilityTimeRequestDto;
+import com.javaExpanding.Two.Facility_Time.Dto.FacilityTimeResponseDto;
 import com.javaExpanding.Two.Facility_Time.Repository.FacilityTimeRepository;
 import com.javaExpanding.Two.Facility_Time.Service.FacilityTimeService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +59,19 @@ public class FacilityTimeImpl implements FacilityTimeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<FacilityTime> getFacilityTimesByFacIdx(Integer facIdx) {
-        return facilityTimeRepository.findByFacility_FacIdx(facIdx);
+    public List<FacilityTimeResponseDto> getFacilityTimesByFacIdx(Integer facIdx) {
+        List<FacilityTime> times = facilityTimeRepository.findByFacility_FacIdx(facIdx);
+
+        // Entity 리스트를 DTO 리스트로 변환 (Jackson 에러 해결)
+        return times.stream().map(time -> {
+            FacilityTimeResponseDto responseDto = new FacilityTimeResponseDto();
+            responseDto.setFacTimeIdx(time.getFacTimeIdx());
+            responseDto.setFacDay(time.getFacDay().name());
+            responseDto.setFacOpen(time.getFacOpen().toString());
+            responseDto.setFacClose(time.getFacClose().toString());
+            responseDto.setFacTimeStatus(time.getFacTimeStatus().name());
+            responseDto.setFacIdx(time.getFacility().getFacIdx());
+            return responseDto;
+        }).collect(Collectors.toList());
     }
 }

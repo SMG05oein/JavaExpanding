@@ -62,5 +62,8 @@ public class Reservation {
     @Column(name = "res_update_dt")
     private LocalDateTime resUpdateDt;
 
+    @Transient
+    private String rejectReason;
+
     public enum ResStatus { 대기, 승인, 거절, 취소 }
 }
